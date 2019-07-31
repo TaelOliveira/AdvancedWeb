@@ -1,6 +1,7 @@
 <?php
 
 namespace aitsydney;
+use aitsydney\Database;
 
 class Product extends Database {
 

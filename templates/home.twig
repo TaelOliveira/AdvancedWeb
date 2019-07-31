@@ -2,6 +2,7 @@
 <html>
 
     <head>
+        <title>{{title}}</title>
         <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
         <script src="node_modules/jquery/dist/jquery.min.js"></script>
         <script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
@@ -9,8 +10,19 @@
     </head>
 
     <body>
-        <h1>Products</h1>
-        
+        <main class="container-fluid">
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-3">
+                        <img class="img-fluid" src="images/products/products{{product.image}}">
+                        <h4 class="product-name">{{product.name}}</h4>
+                        <h6 class="product-price">{{product.price}}</h6>
+                        <p class="product-description">{{product.description}}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </main>
+
     </body>
 
 </html>
