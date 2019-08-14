@@ -2,6 +2,11 @@
 
 require('vendor/autoload.php');
 
+use aitsydney\Navigation;
+
+$nav = new Navigation();
+$nav_items = $nav -> getNavigation();
+
 use aitsydney\ProductDetail;
 
 //get the product id from url parameter
@@ -26,6 +31,7 @@ $template = $twig -> load('detail.twig');
 
 //pass values to twig
 echo $template -> render([
+    'navigation' => $nav_items,
     'detail' => $detail,
     'title' => $detail['product']['name']
 ]);

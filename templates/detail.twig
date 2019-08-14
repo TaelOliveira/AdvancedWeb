@@ -5,12 +5,15 @@
 {% include 'partials/head.twig' %}
 
     <body>
+
+        {% include 'partials/navigation.twig' %}
+        
         <main class="container-fluid">
             <div class="row">
 
                 <div class="col-md-6">
                     {% for image in detail.images %}
-                        <img class="img-fluid" src="images/products/products/{{image.image_file_name}}";
+                        <img class="img-fluid" src="images/products/products/{{image.image_file_name}}"</img>
                     {% endfor %}
                 </div>
                 
