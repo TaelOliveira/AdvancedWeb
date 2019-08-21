@@ -25,9 +25,20 @@ class Product extends Database {
                     FROM image
                     WHERE image_id = @image_id) as image
                 FROM product";
+        
+        if(isset($_GET['category_id'])){
 
+            $query= $query . " " . "INNER JOIN product_category
+                                    ON product.product_id = product_category.product_id
+                                    WHERE product_category.category_id = ?";
+        }
 
         $statement = $this -> connection -> prepare($query);
+
+        if(isset($_GET['category_id'])){
+
+            $statement -> bind_param('i', $_GET['category_id']);
+        }
 
         if($statement -> execute()){
             $result = $statement -> get_result();
