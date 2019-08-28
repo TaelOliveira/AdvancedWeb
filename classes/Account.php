@@ -16,10 +16,11 @@ class Account extends Database{
     public function register($email, $password){
 
         $query= "INSERT INTO account
-                    (account_id, email, password, created)
-                    VALUES (?, ?, ?, NOW())";
+                    (account_id, email, password, created, accessed, updated)
+                    VALUES (UNHEX(?), ?, ?, NOW(), NOW(), NOW())";
     
         $register_errors = array();
+        $response = array();
 
         if(strlen($password) < 8){
             $register_errors['password'] = "Minimum 8 characters!";
@@ -28,25 +29,35 @@ class Account extends Database{
         if(filter_var($email, FILTER_VALIDATE_EMAIL) == false){
             $register_errors['email'] = "Email address not valid!";
         }
-
+print_r($register_errors);
         if(count($register_errors) == 0){
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $account_id = $this -> createAccountID();
 
             try{
                 if($statement = $this -> connection -> prepare($query) == false){
-                    throw(new Exception('Query error!'));
+                    throw(new \Exception('Query error!'));
                 }
                 $statement -> bind_param('sss', $account_id, $email, $hash);
 
                 if($statement -> execute() == false){
-                    throw(new Exception('Failde to execute!'));
+                    throw(new \Exception('Failde to execute!'));
                 }
                 else{
                     //account is created in database
+                    $response['success'] = true;
                 }
             }
+            catch(Exception $ex){
+                error_log($ex -> getMessage());
+            }
         }
+        else{
+            $response['errors'] = $register_errors;
+            $response['success'] = false;
+        }
+        
+        return $response;
     }
 
     private function createAccountID(){

@@ -8,7 +8,7 @@ class Database {
 
     public function __construct()
     {
-        $this -> connection = mysqli_connect('localhost', 'website', 'password', 'data');
+        $this -> connection = mysqli_connect('localhost', 'root', '', 'data');
     }
         
 }
