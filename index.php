@@ -1,43 +1,32 @@
 <?php
-
 require('vendor/autoload.php');
-
-// test for navigation after auth
-// session_start();
-// $_SESSION['auth'] = true;
-// session_destroy();
-
-use aitsydney\Navigation;
-
-$nav = new Navigation();
-$nav_items = $nav -> getNavigation();
-
+//get user's wishlist total
+use aitsydney\WishList;
+$wish = new WishList();
+$wish_total = $wish -> getWishListTotal();
+//create an instance of Product class
 use aitsydney\Product;
-
-$products = new Product();
-$products_result = $products -> getProducts();
-
+$p = new Product();
+$products = $p -> getProducts();
+//create categories
 use aitsydney\Category;
-
-$cat= new Category();
-$categories= $cat -> getCategories();
-//print_r($categories);
-
-//create twig loader
+$cat = new Category();
+$categories = $cat -> getCategories();
+//create navigation
+use aitsydney\Navigation;
+$nav = new Navigation();
+$navigation = $nav -> getNavigation();
+//create twig loader for templates
 $loader = new Twig_Loader_Filesystem('templates');
-
 //create twig environment
 $twig = new Twig_Environment($loader);
-
-//load twig template
+//load a twig template
 $template = $twig -> load('home.twig');
-
-//pass values to twig
-echo $template -> render([
+echo $template -> render( array(
     'categories' => $categories,
-    'navigation' => $nav_items,
-    'products' => $products_result,
-    'title' => 'Hello shop'
-]);
-
+    'wish' => $wish_total,
+    'navigation' => $navigation,
+    'products' => $products,
+    'title' => 'Welcome to the shop'
+) );
 ?>

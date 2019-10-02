@@ -1,39 +1,36 @@
 <?php
-
 require('vendor/autoload.php');
-
 use aitsydney\Navigation;
-
+//get user's wishlist total
+use aitsydney\WishList;
+$wish = new WishList();
+if( $_SERVER['REQUEST_METHOD'] == 'GET' && $_GET['add'] == 'list'){
+    $product_id = $_GET['product_id'];
+    $add = $wish -> addItem($product_id);
+}
+$wish_total = $wish -> getWishListTotal();
 $nav = new Navigation();
-$nav_items = $nav -> getNavigation();
-
+$navigation = $nav -> getNavigation();
 use aitsydney\ProductDetail;
-
-//get the product id from url parameter
-
-if(isset($_GET['product_id']) == false){
-    echo "No parameter set";
+//get the product id from request
+if( isset( $_GET['product_id']) == false ){
+    echo "incorrect parameter";
     exit();
 }
-
-//create an instance of ProductDetail class
+//initialise ProductDetail class
 $pd = new ProductDetail();
-$detail = $pd -> getProductDetail($_GET['product_id']);
-
-//create twig loader
+$detail = $pd -> getProductDetail( $_GET['product_id'] );
+//create the view using Twig
 $loader = new Twig_Loader_Filesystem('templates');
-
-//create twig environment
+//create twig environment and pass the loader
 $twig = new Twig_Environment($loader);
-
-//load twig template
+//call a twig template
 $template = $twig -> load('detail.twig');
-
-//pass values to twig
-echo $template -> render([
-    'navigation' => $nav_items,
+//output the template and pass the data
+echo $template -> render( array(
+    'navigation' => $navigation,
+    'wish' => $wish_total,
     'detail' => $detail,
     'title' => $detail['product']['name']
-]);
-
+) );
 ?>
